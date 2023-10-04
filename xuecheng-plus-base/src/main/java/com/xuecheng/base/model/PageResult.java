@@ -6,17 +6,11 @@ import lombok.ToString;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * @author Mr.M
- * @version 1.0
- * @description 分页查询结果模型类
- * @date 2023/2/11 15:40
- */
 @Data
 @ToString
 public class PageResult<T> implements Serializable {
 
-    // 数据列表
+    //数据列表
     private List<T> items;
 
     //总记录数
