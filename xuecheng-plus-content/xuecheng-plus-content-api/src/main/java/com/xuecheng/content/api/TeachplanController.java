@@ -39,7 +39,8 @@ public class TeachplanController {
     @ApiOperation("删除课程计划")
     @DeleteMapping("teachplan/{teachplanId}")
     public void deleteTeachplan(@PathVariable Long teachplanId){
-        return;
+        teachplanService.deleteTeachplan(teachplanId);
     }
     
+    //TODO 课程计划上下移动
 }
