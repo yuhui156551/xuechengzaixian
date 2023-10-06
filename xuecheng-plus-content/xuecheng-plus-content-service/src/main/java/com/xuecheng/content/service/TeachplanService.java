@@ -2,6 +2,7 @@ package com.xuecheng.content.service;
 
 import com.xuecheng.content.model.dto.SaveTeachplanDto;
 import com.xuecheng.content.model.dto.TeachplanDto;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -30,4 +31,6 @@ public interface TeachplanService {
      * @date 2022/9/9 13:39
      */
     public void saveTeachplan(SaveTeachplanDto teachplanDto);
+    
+    void deleteTeachplan(Long teachplanId);
 }
