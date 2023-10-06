@@ -40,4 +40,4 @@ Content-Type: application/json
 DELETE {{content_host}}/content/teachplan/43
 
 ### 查询教师
-GET {{content_host}}/content/courseTeacher/list/75
+GET {{content_host}}/content/courseTeacher/list/74

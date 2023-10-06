@@ -1,5 +1,6 @@
 package com.xuecheng.content.service;
 
+import com.xuecheng.content.model.dto.SaveTeacherDto;
 import com.xuecheng.content.model.po.CourseTeacher;
 
 import java.util.List;
@@ -10,5 +11,11 @@ import java.util.List;
  */
 public interface CourseTeacherService {
 
-    List<CourseTeacher> getAllTeachers(Long teachplanId);
+    List<CourseTeacher> getCourseTeacher(Long courseId);
+
+    CourseTeacher saveCourseTeacher(SaveTeacherDto saveTeacherDto);
+
+    CourseTeacher updateCourseTeacher(CourseTeacher courseTeacher);
+
+    void deleteCourseTeacher(Long courseId, Long teacherId);
 }
