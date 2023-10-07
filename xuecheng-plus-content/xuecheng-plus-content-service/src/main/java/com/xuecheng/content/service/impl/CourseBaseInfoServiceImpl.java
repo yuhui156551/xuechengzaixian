@@ -5,16 +5,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xuecheng.base.exception.XueChengPlusException;
 import com.xuecheng.base.model.PageParams;
 import com.xuecheng.base.model.PageResult;
-import com.xuecheng.content.mapper.CourseBaseMapper;
-import com.xuecheng.content.mapper.CourseCategoryMapper;
-import com.xuecheng.content.mapper.CourseMarketMapper;
+import com.xuecheng.content.mapper.*;
 import com.xuecheng.content.model.dto.AddCourseDto;
 import com.xuecheng.content.model.dto.CourseBaseInfoDto;
 import com.xuecheng.content.model.dto.EditCourseDto;
 import com.xuecheng.content.model.dto.QueryCourseParamsDto;
-import com.xuecheng.content.model.po.CourseBase;
-import com.xuecheng.content.model.po.CourseCategory;
-import com.xuecheng.content.model.po.CourseMarket;
+import com.xuecheng.content.model.po.*;
 import com.xuecheng.content.service.CourseBaseInfoService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -40,7 +36,11 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
     CourseMarketMapper courseMarketMapper;
     @Autowired
     CourseCategoryMapper courseCategoryMapper;
-
+    @Autowired
+    TeachplanMapper teachplanMapper;
+    @Autowired
+    CourseTeacherMapper courseTeacherMapper;
+    
     @Override
     public PageResult<CourseBase> queryCourseBaseList(PageParams pageParams, QueryCourseParamsDto queryCourseParamsDto) {
         //构建查询条件对象
@@ -201,5 +201,22 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         //查询课程信息
         CourseBaseInfoDto courseBaseInfo = this.getCourseBaseInfo(courseId);
         return courseBaseInfo;
+    }
+
+    @Override
+    public void deleteCourseBase(Long courseId) {
+        //课程的审核状态为未提交时方可删除。
+        CourseBase courseBase = courseBaseMapper.selectById(courseId);
+        if(courseBase.getStatus() != "202002"){
+            throw new XueChengPlusException("课程审核状态不是‘未提交’状态，不可删除！");
+        }
+        courseBaseMapper.deleteById(courseId);
+        //删除课程需要删除课程相关的基本信息、营销信息、课程计划、课程教师信息。
+        LambdaQueryWrapper<Teachplan> queryWrapper2 = new LambdaQueryWrapper<>();
+        queryWrapper2.eq(Teachplan::getCourseId, courseId);
+        teachplanMapper.delete(queryWrapper2);
+        LambdaQueryWrapper<CourseTeacher> queryWrapper3 = new LambdaQueryWrapper<>();
+        queryWrapper3.eq(CourseTeacher::getCourseId, courseId);
+        courseTeacherMapper.delete(queryWrapper3);
     }
 }
