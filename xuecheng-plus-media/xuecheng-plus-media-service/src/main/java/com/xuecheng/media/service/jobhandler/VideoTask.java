@@ -33,8 +33,7 @@ public class VideoTask {
     MediaFileService mediaFileService;
     @Autowired
     MediaFileProcessService mediaFileProcessService;
-
-
+    
     @Value("${videoprocess.ffmpegpath}")
     String ffmpegpath;
 
