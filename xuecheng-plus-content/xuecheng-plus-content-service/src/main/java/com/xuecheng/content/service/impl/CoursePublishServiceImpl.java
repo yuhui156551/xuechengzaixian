@@ -1,5 +1,6 @@
 package com.xuecheng.content.service.impl;
 
+import com.xuecheng.base.exception.CommonError;
 import com.xuecheng.base.exception.XueChengPlusException;
 import com.xuecheng.content.mapper.CourseBaseMapper;
 import com.xuecheng.content.mapper.CoursePublishMapper;
@@ -13,6 +14,8 @@ import com.xuecheng.content.model.po.CoursePublishPre;
 import com.xuecheng.content.service.CourseBaseInfoService;
 import com.xuecheng.content.service.CoursePublishService;
 import com.xuecheng.content.service.TeachplanService;
+import com.xuecheng.messagesdk.model.po.MqMessage;
+import com.xuecheng.messagesdk.service.MqMessageService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,6 +42,8 @@ public class CoursePublishServiceImpl implements CoursePublishService {
     CourseBaseMapper courseBaseMapper;
     @Autowired
     TeachplanService teachplanService;
+    @Autowired
+    MqMessageService mqMessageService;
 
 
     @Override
@@ -131,7 +136,10 @@ public class CoursePublishServiceImpl implements CoursePublishService {
      * @date 2022/9/20 16:32
      */
     private void saveCoursePublishMessage(Long courseId){
-
+        MqMessage mqMessage = mqMessageService.addMessage("course_publish", String.valueOf(courseId), null, null);
+        if(mqMessage==null){
+            XueChengPlusException.cast(CommonError.UNKOWN_ERROR);
+        }
 
     }
 }
