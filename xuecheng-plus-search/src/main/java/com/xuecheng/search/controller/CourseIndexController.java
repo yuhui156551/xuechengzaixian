@@ -32,16 +32,15 @@ public class CourseIndexController {
     @ApiOperation("添加课程索引")
     @PostMapping("course")
     public Boolean add(@RequestBody CourseIndex courseIndex) {
-
         Long id = courseIndex.getId();
         if(id==null){
             XueChengPlusException.cast("课程id为空");
         }
+        //添加课程索引
         Boolean result = indexService.addCourseIndex(courseIndexStore, String.valueOf(id), courseIndex);
         if(!result){
             XueChengPlusException.cast("添加课程索引失败");
         }
         return result;
-
     }
 }
