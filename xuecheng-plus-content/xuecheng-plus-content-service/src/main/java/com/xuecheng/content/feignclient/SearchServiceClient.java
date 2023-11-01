@@ -1,11 +1,15 @@
-package com.xuecheng.content.service;
+package com.xuecheng.content.feignclient;
 
-import com.xuecheng.content.feignclient.SearchServiceClientFallbackFactory;
-import com.xuecheng.content.model.dto.CourseIndex;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+/**
+ * @author Mr.M
+ * @version 1.0
+ * @description TODO
+ * @date 2023/2/22 14:47
+ */
 @FeignClient(value = "search", fallbackFactory = SearchServiceClientFallbackFactory.class)
 public interface SearchServiceClient {
 

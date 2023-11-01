@@ -3,6 +3,7 @@ package com.xuecheng.content.service;
 import com.xuecheng.content.model.dto.CoursePreviewDto;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * @author Mr.M
@@ -47,5 +48,5 @@ public interface CoursePublishService {
      * @author Mr.M
      * @date 2022/9/23 16:59
      */
-    public void  uploadCourseHtml(Long courseId,File file);
+    public void  uploadCourseHtml(Long courseId,File file) throws IOException;
 }

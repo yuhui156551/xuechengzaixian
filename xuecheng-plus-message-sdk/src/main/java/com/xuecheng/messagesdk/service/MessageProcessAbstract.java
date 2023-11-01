@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -29,7 +30,7 @@ public abstract class MessageProcessAbstract {
      * @author Mr.M
      * @date 2022/9/21 19:47
      */
-    public abstract boolean execute(MqMessage mqMessage);
+    public abstract boolean execute(MqMessage mqMessage) throws IOException;
 
 
     /**

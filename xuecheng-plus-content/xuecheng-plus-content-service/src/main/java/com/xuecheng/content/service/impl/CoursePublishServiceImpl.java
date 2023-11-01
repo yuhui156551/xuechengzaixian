@@ -31,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
@@ -112,29 +113,29 @@ public class CoursePublishServiceImpl implements CoursePublishService {
     }
 
     /**
-     * @description 保存课程发布信息
-     * @param courseId  课程id
+     * @param courseId 课程id
      * @return void
+     * @description 保存课程发布信息
      * @author Mr.M
      * @date 2022/9/20 16:32
      */
-    private void saveCoursePublish(Long courseId){
+    private void saveCoursePublish(Long courseId) {
         //整合课程发布信息
         //查询课程预发布表
         CoursePublishPre coursePublishPre = coursePublishPreMapper.selectById(courseId);
-        if(coursePublishPre == null){
+        if (coursePublishPre == null) {
             XueChengPlusException.cast("课程预发布数据为空");
         }
 
         CoursePublish coursePublish = new CoursePublish();
 
         //拷贝到课程发布对象
-        BeanUtils.copyProperties(coursePublishPre,coursePublish);
+        BeanUtils.copyProperties(coursePublishPre, coursePublish);
         coursePublish.setStatus("203002");
         CoursePublish coursePublishUpdate = coursePublishMapper.selectById(courseId);
-        if(coursePublishUpdate == null){
+        if (coursePublishUpdate == null) {
             coursePublishMapper.insert(coursePublish);
-        }else{
+        } else {
             coursePublishMapper.updateById(coursePublish);
         }
         //更新课程基本表的发布状态
@@ -145,15 +146,15 @@ public class CoursePublishServiceImpl implements CoursePublishService {
     }
 
     /**
-     * @description 保存消息表记录，稍后实现
-     * @param courseId  课程id
+     * @param courseId 课程id
      * @return void
+     * @description 保存消息表记录，稍后实现
      * @author Mr.M
      * @date 2022/9/20 16:32
      */
-    private void saveCoursePublishMessage(Long courseId){
+    private void saveCoursePublishMessage(Long courseId) {
         MqMessage mqMessage = mqMessageService.addMessage("course_publish", String.valueOf(courseId), null, null);
-        if(mqMessage==null){
+        if (mqMessage == null) {
             XueChengPlusException.cast(CommonError.UNKOWN_ERROR);
         }
 
@@ -163,7 +164,7 @@ public class CoursePublishServiceImpl implements CoursePublishService {
     public File generateCourseHtml(Long courseId) {
 
         //静态化文件
-        File htmlFile  = null;
+        File htmlFile = null;
 
         try {
             //配置freemarker
@@ -193,13 +194,13 @@ public class CoursePublishServiceImpl implements CoursePublishService {
             //将静态化内容输出到文件中
             InputStream inputStream = IOUtils.toInputStream(content);
             //创建静态化文件
-            htmlFile = File.createTempFile("course",".html");
-            log.debug("课程静态化，生成静态文件:{}",htmlFile.getAbsolutePath());
+            htmlFile = File.createTempFile("course", ".html");
+            log.debug("课程静态化，生成静态文件:{}", htmlFile.getAbsolutePath());
             //输出流
             FileOutputStream outputStream = new FileOutputStream(htmlFile);
             IOUtils.copy(inputStream, outputStream);
         } catch (Exception e) {
-            log.error("课程静态化异常:{}",e.toString());
+            log.error("课程静态化异常:{}", e.toString());
             XueChengPlusException.cast("课程静态化异常");
         }
 
@@ -207,10 +208,10 @@ public class CoursePublishServiceImpl implements CoursePublishService {
     }
 
     @Override
-    public void uploadCourseHtml(Long courseId, File file) {
+    public void uploadCourseHtml(Long courseId, File file) throws IOException {
         MultipartFile multipartFile = MultipartSupportConfig.getMultipartFile(file);
-        String course = mediaServiceClient.uploadFile(multipartFile, "course/"+courseId+".html");
-        if(course==null){
+        String course = mediaServiceClient.upload(multipartFile, "course/" + courseId + ".html");
+        if (course == null) {
             XueChengPlusException.cast("上传静态文件异常");
         }
     }
