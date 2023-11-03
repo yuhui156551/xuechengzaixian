@@ -16,8 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
+@EnableFeignClients(basePackages={"com.xuecheng.*.feignclient"})
 public class AuthApplication {
-
+    @Bean
+    RestTemplate restTemplate(){
+        RestTemplate restTemplate = new RestTemplate(new OkHttp3ClientHttpRequestFactory());
+        return  restTemplate;
+    }
+    
     public static void main(String[] args) {
         SpringApplication.run(AuthApplication.class, args);
     }
