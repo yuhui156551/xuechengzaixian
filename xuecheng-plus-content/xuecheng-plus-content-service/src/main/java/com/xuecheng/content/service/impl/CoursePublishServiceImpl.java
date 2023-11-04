@@ -62,7 +62,11 @@ public class CoursePublishServiceImpl implements CoursePublishService {
     @Autowired
     MediaServiceClient mediaServiceClient;
 
-
+    public CoursePublish getCoursePublish(Long courseId){
+        CoursePublish coursePublish = coursePublishMapper.selectById(courseId);
+        return coursePublish ;
+    }
+    
     @Override
     public CoursePreviewDto getCoursePreviewInfo(Long courseId) {
 
